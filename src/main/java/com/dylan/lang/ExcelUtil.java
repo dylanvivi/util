@@ -1,5 +1,7 @@
 package com.dylan.lang;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
@@ -25,6 +27,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author lucas ^_^
@@ -32,6 +36,33 @@ import org.apache.poi.hssf.util.HSSFColor;
  * @Description 
  */
 public class ExcelUtil {
+
+	private static Logger log = LoggerFactory.getLogger(ExcelUtil.class);
+
+	/**  
+	* 功能：生成Excel文件  
+	* @param wb	HSSFWorkbook  
+	* @param fileName 写入文件的相对路径 （包含文件名） 
+	*/
+	public static void writeWorkbook(HSSFWorkbook wb, String fileName) {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(fileName);
+			wb.write(fos);
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		} finally {
+			try {
+				if (fos != null) {
+					fos.close();
+				}
+			} catch (IOException e) {
+				log.error(e.getMessage());
+			}
+		}
+	}
 
 	public static <T> void exportExcel(String title, String[] headers, String[] cols, Collection<T> dataset,
 			OutputStream out, String pattern, String[] sumcols) {
