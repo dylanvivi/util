@@ -15,10 +15,36 @@ import java.nio.channels.FileChannel;
 import org.apache.commons.io.IOUtils;
 
 /**
- * @author yubin
+ * @author dylan
  * @category 读写文件工具类
  */
 public class RWFileUtil {
+	
+	/**
+	 * 增量插入
+	 * @title appendBinaryToFile
+	 * @Description 
+	 * @param binary
+	 * @param path
+	 * @param fileName
+	 * @date 2013-7-18
+	 */
+	public static void appendBinaryToFile(byte[] binary, String path, String fileName) {
+		FileOutputStream fos = null;
+		try {
+			File localFolder = new File(path);
+			if (!localFolder.exists()) {
+				localFolder.mkdirs();
+			}
+			File file = new File(path + File.separator + fileName);
+			fos = new FileOutputStream(file, true);
+			fos.write(binary);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(fos);
+		}
+	}
 
 	public static void writeBinaryToFile(byte[] binary, String path, String fileName) {
 		FileOutputStream fos = null;
